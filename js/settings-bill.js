@@ -10,7 +10,7 @@ var settBillAddBtnElement = document.querySelector(".settingsBillBtn");
 var updateSettThreeBtnElement = document.querySelector(".updateSettings");
 // create a variables that will keep track of all three totals.
 var warningSettThreeElement = document.querySelector(".warningLevelSetting");
-var criticalSettThreeElement = document.querySelector(".criticalLevelSetting");
+var criticalLevelSetting = document.querySelector(".criticalLevelSetting");
 var totalCallThreeElement = document.querySelector(".callTotalSettings");
 var totalSmsThreeElement = document.querySelector(".smsTotalSettings");
 var totalAllThreeElement = document.querySelector(".totalSettings");
@@ -23,19 +23,24 @@ var critical = 0;
 var warning = 0;
 var totalSett = 0;
 //add an event listener for when the add button is pressed
-function billSettUpdate(){
+function billSettUpdate() {
     var updateSettBtn = document.querySelector("input[name='billItemTypeWithSettings']:checked");
-    if (updateSettBtn){
+    if (updateSettBtn) {
         var billSettEntered = updateSettBtn.value;
-        if (billSettEntered==="call"){
-            callSettTotal +=callUpdate;
+        if (billSettEntered === "call") {
+            callSettTotal += callUpdate;
             totalSett += callUpdate;
         }
-        else if(billSettEntered==="sms"){
+        else if (billSettEntered === "sms") {
             smsSettTotal += smsUpdate;
-            totalSett += callUpdate; 
+            totalSett += callUpdate;
         }
     }
+
+    if (totalSett <= critical){
+        if(updateSettBtn){
+
+    
     totalCallThreeElement.innerHTML = callSettTotal.toFixed(2);
     totalSmsThreeElement.innerHTML = smsSettTotal.toFixed(2);
     totalAllThreeElement.innerHTML = totalSett.toFixed(2);
@@ -43,30 +48,43 @@ function billSettUpdate(){
     totalAllThreeElement.classList.remove("danger");
     totalAllThreeElement.classList.remove("warning");
 
-    if(totalSett >=critical){
+    if (totalSett >= critical) {
+
         totalAllThreeElement.classList.add("danger");
     }
-    else if(totalSett >= warning){
+    else if (totalSett >= warning) {
         totalAllThreeElement.classList.add("warning");
     }
-    
+    color()
+
+}
+    }
 }
 
 
-function updateSettingsBill(){
-    callUpdate = parseFloat(callCostSettThreeElement.value)
-    smsUpdate = parseFloat(smsCostSettThreeElement.value)
-    critical = parseFloat(criticalSettThreeElement.value)
-    warning = parseFloat(warningSettThreeElement.value)
+function updateSettingsBill() {
+    callUpdate = parseFloat(callCostSettThreeElement.value);
+    // console.log(callUpdate)
+    smsUpdate = parseFloat(smsCostSettThreeElement.value);
+    critical = parseFloat(criticalLevelSetting.value);
+    warning = parseFloat(warningSettThreeElement.value);
 
-    if(totalSett >= critical){
+    color()
+}
+function color() {
+    totalAllThreeElement.classList.remove("danger");
+    totalAllThreeElement.classList.remove("warning");
+    if (totalSett >= critical) {
+        totalAllThreeElement.classList.remove("warning");
         totalAllThreeElement.classList.add("danger");
     }
-    else if(totalSett >= warning){
-        totalAllThreeElement.classList.add("waring"); 
+    else if (totalSett >= warning) {
+        totalAllThreeElement.classList.remove("danger");
+        totalAllThreeElement.classList.add("warning");
+    }
 }
-}
-updateSettThreeBtnElement.addEventListener('click',updateSettingsBill);
+
+updateSettThreeBtnElement.addEventListener('click', updateSettingsBill);
 settBillAddBtnElement.addEventListener('click', billSettUpdate);
 
 //in the event listener get the value from the billItemTypeRadio radio buttons
