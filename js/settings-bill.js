@@ -49,7 +49,7 @@ function billSettUpdate(){
     else if(totalSett >= warning){
         totalAllThreeElement.classList.add("warning");
     }
-    // updateSettingsBill()
+    
 }
 
 
