@@ -22,45 +22,6 @@ var callUpdate = 0;
 var critical = 0;
 var warning = 0;
 var totalSett = 0;
-//add an event listener for when the add button is pressed
-function billSettUpdate() {
-    var updateSettBtn = document.querySelector("input[name='billItemTypeWithSettings']:checked");
-    if (updateSettBtn) {
-        var billSettEntered = updateSettBtn.value;
-        if (billSettEntered === "call") {
-            callSettTotal += callUpdate;
-            totalSett += callUpdate;
-        }
-        else if (billSettEntered === "sms") {
-            smsSettTotal += smsUpdate;
-            totalSett += callUpdate;
-        }
-    }
-
-    if (totalSett <= critical){
-        if(updateSettBtn){
-
-    
-    totalCallThreeElement.innerHTML = callSettTotal.toFixed(2);
-    totalSmsThreeElement.innerHTML = smsSettTotal.toFixed(2);
-    totalAllThreeElement.innerHTML = totalSett.toFixed(2);
-
-    totalAllThreeElement.classList.remove("danger");
-    totalAllThreeElement.classList.remove("warning");
-
-    if (totalSett >= critical) {
-
-        totalAllThreeElement.classList.add("danger");
-    }
-    else if (totalSett >= warning) {
-        totalAllThreeElement.classList.add("warning");
-    }
-    color()
-
-}
-    }
-}
-
 
 function updateSettingsBill() {
     callUpdate = parseFloat(callCostSettThreeElement.value);
@@ -71,9 +32,43 @@ function updateSettingsBill() {
 
     color()
 }
+
+//add an event listener for when the add button is pressed
+function billSettUpdate() {
+    var updateSettBtn = document.querySelector("input[name='billItemTypeWithSettings']:checked");
+    if (updateSettBtn) {
+        //stoping total from incrimenting after reaching crtical
+        if (totalSett < critical) {
+            var billSettEntered = updateSettBtn.value;
+             // * add nothing for invalid values that is not 'call' or 'sms'.
+            if (billSettEntered === "call") {
+             // * add the appropriate value to the call / sms total
+
+                callSettTotal += callUpdate;
+                // * add the appropriate value to the overall total
+                totalSett += callUpdate;
+            }
+            else if (billSettEntered === "sms") {
+                smsSettTotal += smsUpdate;
+                // * add the appropriate value to the overall total
+                totalSett += callUpdate;
+            }
+        }
+    }
+// * display the latest total on the screen.
+    totalCallThreeElement.innerHTML = callSettTotal.toFixed(2);
+    totalSmsThreeElement.innerHTML = smsSettTotal.toFixed(2);
+    totalAllThreeElement.innerHTML = totalSett.toFixed(2);
+    color()
+
+}
+
+
 function color() {
     totalAllThreeElement.classList.remove("danger");
     totalAllThreeElement.classList.remove("warning");
+    // * check the value thresholds and display the total value in the right color.
+
     if (totalSett >= critical) {
         totalAllThreeElement.classList.remove("warning");
         totalAllThreeElement.classList.add("danger");
@@ -85,11 +80,7 @@ function color() {
 }
 
 updateSettThreeBtnElement.addEventListener('click', updateSettingsBill);
+//in the event listener get the value from the billItemTypeRadio radio buttons
+
 settBillAddBtnElement.addEventListener('click', billSettUpdate);
 
-//in the event listener get the value from the billItemTypeRadio radio buttons
-// * add the appropriate value to the call / sms total
-// * add the appropriate value to the overall total
-// * add nothing for invalid values that is not 'call' or 'sms'.
-// * display the latest total on the screen.
-// * check the value thresholds and display the total value in the right color.
